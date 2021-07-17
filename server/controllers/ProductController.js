@@ -48,5 +48,41 @@ class ProductController {
         });
       });
   }
+
+  // update product
+  updateProduct(req, res) {
+    const id = req.params.productId;
+    const updatedProduct = req.body;
+    Product.update({ _id: id }, { $set: updatedProduct })
+      .exec()
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: "Product is updated",
+          updatedProduct: updatedProduct,
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          success: false,
+          message: "Server error. Please try again.",
+        });
+      });
+  }
+  deteleProduct(req, res) {
+    const id = req.params.productId;
+    Product.findByIdAndRemove(id)
+      .exec()
+      .then(() =>
+        res.status(204).json({
+          success: true,
+        })
+      )
+      .catch((err) =>
+        res.status(500).json({
+          success: false,
+        })
+      );
+  }
 }
 module.exports = new ProductController();
